@@ -5,9 +5,9 @@
 var P = window.PAGES = window.PAGES || {};
 
 /* ---------- fragmentos reutilizables ---------- */
-var FORM = '<form class="form" id="form" novalidate>' +
-'<input type="hidden" name="access_key" value="45efbbbc-6a64-4c8d-9a2a-cfa96accb69e">' +
-'<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">' +
+var W3F = '<input type="hidden" name="access_key" value="45efbbbc-6a64-4c8d-9a2a-cfa96accb69e">' +
+'<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">';
+var FORM = '<form class="form" id="form" novalidate>' + W3F +
 '<div><label for="f-name">Nombre</label><input id="f-name" required></div>' +
 '<div><label for="f-mail">Email corporativo</label><input id="f-mail" type="email" required></div>' +
 '<div><label for="f-size">Tamaño de la empresa</label><select id="f-size">' +
@@ -49,6 +49,45 @@ P['faq'] = {
   '<details><summary>¿Cuánto tarda en verse algo funcionando?</summary><p>Diez días laborables desde que tenemos accesos: ese es el compromiso del piloto y está en el contrato. Para la implantación completa no damos un número único, porque depende de cuántos sistemas haya y del estado de tus datos — y eso lo sabemos al cerrar la auditoría, en el día ocho.</p></details>' +
   '<details><summary>Somos una empresa pequeña, ¿nos vale?</summary><p>Sí. Empieza por el <a href="#/servicios/auditoria-ia">diagnóstico exprés</a> de un solo proceso. Si el proceso no merece automatizarse todavía, el informe lo dirá.</p></details>' +
   '<details><summary>¿Dónde van nuestros datos?</summary><p>A la UE, o a tu propia infraestructura. <a href="#/confianza/seguridad-y-datos">Detalle completo</a>.</p></details></div>'
+};
+
+/* Landing de los anuncios de Meta para clínicas de medicina estética. `landing:true` quita menú,
+   migas y banda de contacto: la página tiene una sola acción. Sin precios, sin porcentajes del
+   sector y sin nombrar medicamentos (su publicidad al público está sancionada). */
+P['calculadora-clinicas'] = {
+  t:'Calculadora de pacientes inactivos para clínicas de medicina estética',
+  d:'Calcula con tus cifras cuánto dinero tiene parado tu clínica de medicina estética en pacientes que no vuelven y presupuestos sin cerrar.',
+  h1:'Tu próximo paciente ya está en tu base de datos',
+  sub:'Para clínicas de medicina estética. Calcula con tus números cuánto dinero tienes parado. Tarda un minuto.',
+  crumb:[], landing:true,
+  html:'<div class="glass roi"><div class="roi-in form" style="grid-template-columns:1fr">' +
+  '<div><label for="c-ina">Pacientes que no vienen desde hace más de 6 meses</label><input id="c-ina" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 300"></div>' +
+  '<div><label for="c-pre">Presupuestos entregados sin cerrar</label><input id="c-pre" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 40"></div>' +
+  '<div><label for="c-imp">Importe medio de un tratamiento, en euros</label><input id="c-imp" type="number" inputmode="decimal" min="0" step="any" placeholder="Ej.: 350"></div>' +
+  '</div><div class="roi-out" aria-live="polite"><div><span class="lab">Dinero parado en tu base de datos</span><div class="big" id="c-eur">—</div></div><div>' +
+  '<div class="outrow"><span>Pacientes y presupuestos sin seguimiento</span><b id="c-n">—</b></div>' +
+  '<div class="outrow"><span>Si vuelve 1 de cada 10</span><b id="c-dec">—</b></div></div>' +
+  '<p class="disc">Cálculo: (pacientes inactivos + presupuestos sin cerrar) × importe medio. No todo se recupera: en la llamada te decimos qué parte es realista en tu clínica.</p>' +
+  '</div></div>' +
+
+  '<h2>Qué hacemos con esos pacientes</h2><ul class="tick">' +
+  '<li>Avisamos a cada paciente cuando le toca volver, sin nombrar su tratamiento.</li>' +
+  '<li>Seguimos cada presupuesto pendiente, uno por uno, hasta que el paciente responde.</li>' +
+  '<li>Escribimos solo a quien dio su consentimiento. Con el resto preparamos una lista de llamadas para recepción.</li>' +
+  '<li>Tu equipo recibe un aviso cuando alguien contesta, y no cambias de programa de gestión.</li></ul>' +
+  '<div class="callout"><b>Con los datos de tus pacientes, sin atajos.</b> Los mensajes no mencionan tratamientos ni medicamentos y todos incluyen la baja. Antes de empezar firmamos contigo el contrato de encargado de tratamiento.</div>' +
+
+  '<h2>Recibe tu cálculo y el plan para tu clínica</h2>' +
+  '<div style="max-width:760px"><form class="form" id="lead" novalidate>' + W3F +
+  '<div><label for="l-name">Nombre</label><input id="l-name" autocomplete="name" required></div>' +
+  '<div><label for="l-clinic">Clínica</label><input id="l-clinic" autocomplete="organization" required></div>' +
+  '<div><label for="l-tel">Teléfono</label><input id="l-tel" type="tel" inputmode="tel" autocomplete="tel" required></div>' +
+  '<div><label for="l-mail">Correo</label><input id="l-mail" type="email" inputmode="email" autocomplete="email" required></div>' +
+  '<div class="full"><button class="btn btn-pri" type="submit" id="l-submit">Recibir mi cálculo</button></div>' +
+  '<p class="full disc" style="margin:0">Te enviamos un correo de confirmación y te llamamos para darte tu cálculo. Al enviar aceptas la <a href="#/privacidad">política de privacidad</a>.</p></form>' +
+  '<div class="result" id="l-result" hidden><div class="bar"><p id="l-msg"></p>' +
+  '<a class="btn btn-pri" id="l-mailto" href="#" hidden>Abrir en el correo</a></div></div></div>' +
+  '<p class="note" style="margin-top:28px">Nuria Jiménez Nieto, fundadora de Calibra · info@calibraautomation.com</p>'
 };
 
 /* ---------- HOME ---------- */

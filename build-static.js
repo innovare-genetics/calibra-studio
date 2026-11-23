@@ -135,7 +135,7 @@ function page(route, p, bodyHtml) {
 ${head.slice(head.indexOf('<link rel="preconnect"'))}
 <script type="application/ld+json">${jsonLd(route, p)}</script>
 </head>
-<body>
+<body${p.landing ? ' class="landing"' : ''}>
 ${fixLinks(sprite + chrome)}
 <main id="app">
 ${bodyHtml}
@@ -167,10 +167,10 @@ for (const route of routes) {
     const notice = '';
     const body = (p.html || '').replace('{{FORM}}', '<div style="max-width:760px">' + FRAG.FORM + '</div>');
     bodyHtml = fixLinks(
-      '<section class="page"><div class="wrap">' + crumbHtml(p) + notice +
+      '<section class="page"><div class="wrap">' + (p.landing ? '' : crumbHtml(p)) + notice +
       '<div class="page-head"><h1>' + p.h1 + '</h1>' + (p.sub ? '<p class="sub">' + p.sub + '</p>' : '') +
       (p.date ? '<p class="date">Publicado el ' + p.date + ' · revisado el 19 de septiembre de 2026</p>' : '') +
-      '</div><div class="body">' + body + '</div>' + relHtml(p.rel) + ctaHtml() + '</div></section>'
+      '</div><div class="body">' + body + '</div>' + (p.landing ? '' : relHtml(p.rel) + ctaHtml()) + '</div></section>'
     );
   }
   const dir = route === 'home' ? OUT : path.join(OUT, route);

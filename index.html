@@ -19,6 +19,7 @@
 }
 *{box-sizing:border-box}
 html,body{overflow-x:clip}
+[hidden]{display:none !important} /* .btn fija display y anulaba el atributo hidden */
 body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16.5px; line-height:1.62; -webkit-font-smoothing:antialiased}
 body::before{
   content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5;
@@ -95,6 +96,9 @@ main a:not(.card):not(.post):not(.btn):hover{text-decoration-color:var(--cyan)}
 .burger span{display:block; width:16px; height:1.6px; background:currentColor; margin:3px auto; border-radius:2px}
 @media (max-width:1060px){.burger{display:block}}
 @media (max-width:560px){.nav-cta{display:none}}
+body.landing .menu,body.landing .burger,body.landing .lang,body.landing .nav-cta,body.landing .fgrid{display:none}
+body.landing .fbot{margin-top:0; padding-top:0; border-top:0}
+button.btn{font-family:inherit} /* los <button> no heredan la tipografía por defecto */
 .drawer{position:fixed; inset:0; z-index:80; background:rgba(4,5,9,.96); backdrop-filter:blur(12px); padding:20px; overflow-y:auto; display:none}
 .drawer.open{display:block}
 .drawer .close{position:absolute; top:18px; right:18px; appearance:none; border:1px solid var(--line-2); background:var(--panel); color:var(--ink); border-radius:10px; width:38px; height:38px; font-size:20px; cursor:pointer}
@@ -570,11 +574,12 @@ function initMq(){
   mqt.innerHTML=S.concat(S).map(function(s){return '<span>'+s+'</span>';}).join('');
 }
 
+function nf(n,u){var s=new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(Math.round(n));return u?s+' '+u:s;}
+function eur(n){return new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Math.round(n));}
+
 function initRoi(){
   var ids=['people','hours','cost','auto','inv'], r={};
   for(var k=0;k<ids.length;k++){r[ids[k]]=document.getElementById('r-'+ids[k]); if(!r[ids[k]])return;}
-  function nf(n,u){var s=new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(Math.round(n));return u?s+' '+u:s;}
-  function eur(n){return new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Math.round(n));}
   function calc(){
     ids.forEach(function(k){var e=r[k]; e.style.setProperty('--p',((e.value-e.min)/(e.max-e.min)*100)+'%');});
     var pe=+r.people.value, ho=+r.hours.value, co=+r.cost.value, au=+r.auto.value, inv=+r.inv.value;
@@ -592,6 +597,64 @@ function initRoi(){
   }
   ids.forEach(function(k){r[k].oninput=calc;});
   calc();
+}
+
+/* Landing de clínicas: dinero parado en pacientes inactivos y presupuestos sin cerrar. null si falta un dato. */
+function calcParado(ina,pre,imp){
+  ina=Math.round(ina); pre=Math.round(pre);
+  if(!(ina>=0)||!(pre>=0)||!(imp>=0)) return null;
+  var n=ina+pre;
+  return {n:n, total:n*imp, decima:n*imp/10};
+}
+function initCalc(){
+  var ids=['ina','pre','imp'], c={};
+  for(var k=0;k<ids.length;k++){c[ids[k]]=document.getElementById('c-'+ids[k]); if(!c[ids[k]])return;}
+  function num(e){return e.value.trim()===''?NaN:+e.value;}
+  function calc(){
+    var r=calcParado(num(c.ina),num(c.pre),num(c.imp));
+    document.getElementById('c-eur').textContent=r?eur(r.total):'—';
+    document.getElementById('c-n').textContent=r?nf(r.n):'—';
+    document.getElementById('c-dec').textContent=r?eur(r.decima):'—';
+  }
+  ids.forEach(function(k){c[k].oninput=calc;});
+  calc();
+}
+function initLead(){
+  var f=document.getElementById('lead'); if(!f) return;
+  f.onsubmit=function(ev){
+    ev.preventDefault();
+    var g=function(i){return document.getElementById(i);};
+    var name=g('l-name').value.trim(), clinic=g('l-clinic').value.trim(), tel=g('l-tel').value.trim(), mail=g('l-mail').value.trim();
+    if(!name){g('l-name').focus();return;}
+    if(!clinic){g('l-clinic').focus();return;}
+    if(tel.replace(/\D/g,'').length<9){g('l-tel').focus();return;}
+    if(!mail||!g('l-mail').checkValidity()){g('l-mail').focus();return;}
+    var body='Nombre: '+name+'\nClínica: '+clinic+'\nTeléfono: '+tel+'\nCorreo: '+mail+
+      '\n\nPacientes sin venir desde hace más de 6 meses: '+(g('c-ina').value||'—')+
+      '\nPresupuestos sin cerrar: '+(g('c-pre').value||'—')+
+      '\nImporte medio de un tratamiento: '+(g('c-imp').value||'—')+
+      '\nDinero parado: '+g('c-eur').textContent+
+      '\n\n— Enviado desde la calculadora para clínicas';
+    var btn=g('l-submit'), original=btn.textContent;
+    btn.disabled=true; btn.textContent='Enviando…';
+    var fd=new FormData(f);
+    fd.append('subject','Calculadora para clínicas — '+clinic);
+    fd.append('from_name',name);
+    fd.append('replyto',mail);
+    fd.append('message',body);
+    function done(ok){
+      g('l-msg').textContent=ok?'Recibido. Te escribimos por correo y te llamamos para darte tu cálculo.':'No hemos podido enviarlo. Ábrelo en tu correo y envíanoslo desde ahí.';
+      g('l-mailto').hidden=ok;
+      g('l-mailto').href='mailto:info@calibraautomation.com?subject='+encodeURIComponent('Calculadora para clínicas — '+clinic)+'&body='+encodeURIComponent(body);
+      g('l-result').hidden=false;
+      g('l-result').scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});
+      btn.disabled=false; btn.textContent=original;
+    }
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Accept':'application/json'},body:fd})
+      .then(function(r){return r.json();})
+      .then(function(json){done(!!(json&&json.success));})
+      .catch(function(){done(false);});
+  };
 }
 
 function initForm(){
@@ -715,6 +778,8 @@ function render(){
   if(fieldRaf){cancelAnimationFrame(fieldRaf); fieldRaf=null;}
   if(pipeTimer){clearInterval(pipeTimer); pipeTimer=null;}
   window.onresize=null; window.onmousemove=null;
+  var landing=!!(P[route]&&P[route].landing);
+  document.body.classList.toggle('landing',landing);
 
   if(route==='home'){
     app.innerHTML=linkify(HOME);
@@ -739,13 +804,13 @@ function render(){
   var notice = (lang==='en') ? '<div class="notice">This page is currently available in Spanish only. The English version is part of the next phase.</div>' : '';
   var body=(p.html||'').replace('{{FORM}}', '<div style="max-width:760px">'+FORM+'</div>');
 
-  app.innerHTML=linkify('<section class="page"><div class="wrap">'+crumb+notice+
+  app.innerHTML=linkify('<section class="page"><div class="wrap">'+(landing?'':crumb)+notice+
     '<div class="page-head"><h1>'+p.h1+'</h1>'+(p.sub?'<p class="sub">'+p.sub+'</p>':'')+
     (p.date?'<p class="date">Publicado el '+p.date+' · revisado el 19 de septiembre de 2026</p>':'')+'</div>'+
-    '<div class="body">'+body+'</div>'+relBlock(p.rel)+ctaBand()+'</div></section>');
+    '<div class="body">'+body+'</div>'+(landing?'':relBlock(p.rel)+ctaBand())+'</div></section>');
 
   setSeo(route,p);
-  initRoi(); initForm(); initGlass();
+  initRoi(); initCalc(); initLead(); initForm(); initGlass();
   markActive(route); window.scrollTo(0,0); onScroll();
 }
 

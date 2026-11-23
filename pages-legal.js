@@ -94,6 +94,13 @@ window.PAGES = Object.assign(window.PAGES || {}, {
   <td>12 meses desde el último contacto si no hay relación contractual</td>
 </tr>
 <tr>
+  <td><b>Calculadora para clínicas</b></td>
+  <td>Nombre, nombre de la clínica, teléfono, correo electrónico y las cifras que introduzcas en la calculadora</td>
+  <td>Llamarte o escribirte por correo electrónico para darte tu cálculo y, en su caso, elaborar y enviarte una propuesta</td>
+  <td>Aplicación de medidas precontractuales a petición del interesado (art. 6.1.b RGPD)</td>
+  <td>12 meses desde el último contacto si no hay relación contractual</td>
+</tr>
+<tr>
   <td><b>Correo electrónico</b></td>
   <td>Los datos que incluyas en tu mensaje</td>
   <td>Mantener la comunicación</td>
