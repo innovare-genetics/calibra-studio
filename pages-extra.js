@@ -87,7 +87,7 @@ P['calculadora-clinicas'] = {
   '<p class="full disc" style="margin:0">Te enviamos un correo de confirmación y te llamamos para darte tu cálculo. Al enviar aceptas la <a href="#/privacidad">política de privacidad</a>.</p></form>' +
   '<div class="result" id="l-result" hidden><div class="bar"><p id="l-msg"></p>' +
   '<a class="btn btn-pri" id="l-mailto" href="#" hidden>Abrir en el correo</a></div></div></div>' +
-  '<p class="note" style="margin-top:28px">Nuria Jiménez Nieto, fundadora de Calibra · info@calibraautomation.com</p>'
+  '<p class="note" style="margin-top:28px">Calibra Automation Studio · info@calibraautomation.com</p>'
 };
 
 /* ---------- HOME ---------- */
