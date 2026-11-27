@@ -51,28 +51,31 @@ P['faq'] = {
   '<details><summary>¿Dónde van nuestros datos?</summary><p>A la UE, o a tu propia infraestructura. <a href="#/confianza/seguridad-y-datos">Detalle completo</a>.</p></details></div>'
 };
 
-/* Landing de los anuncios de Meta para clínicas de medicina estética. `landing:true` quita menú,
-   migas y banda de contacto: la página tiene una sola acción. Sin precios, sin porcentajes del
-   sector y sin nombrar medicamentos (su publicidad al público está sancionada). */
+/* Landing de los anuncios de Meta para clínicas. `landing:true` quita menú, migas y banda de
+   contacto: la página tiene una sola acción. Las tres entradas son las mismas que pregunta el
+   formulario del anuncio, para que la cifra de la llamada y la de la web coincidan. Sin precios,
+   sin porcentajes del sector y sin nombrar tratamientos ni medicamentos (su publicidad al
+   público está sancionada). */
 P['calculadora-clinicas'] = {
-  t:'Calculadora de pacientes inactivos para clínicas de medicina estética',
-  d:'Calcula con tus cifras cuánto dinero tiene parado tu clínica de medicina estética en pacientes que no vuelven y presupuestos sin cerrar.',
-  h1:'Tu próximo paciente ya está en tu base de datos',
-  sub:'Para clínicas de medicina estética. Calcula con tus números cuánto dinero tienes parado. Tarda un minuto.',
+  t:'Calculadora: lo que se escapa en tu clínica cada año',
+  d:'Calcula con tus cifras cuánto se te escapa al año entre presupuestos que se quedan sin seguimiento y mensajes que entran fuera de horario.',
+  h1:'Calcula cuánto se te escapa cada mes',
+  sub:'Para clínicas. Los presupuestos que se enfrían y los mensajes que entran con la recepción cerrada, con tus números. Tarda un minuto.',
   crumb:[], landing:true,
   html:'<div class="glass roi"><div class="roi-in form" style="grid-template-columns:1fr">' +
-  '<div><label for="c-ina">Pacientes que no vienen desde hace más de 6 meses</label><input id="c-ina" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 300"></div>' +
-  '<div><label for="c-pre">Presupuestos entregados sin cerrar</label><input id="c-pre" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 40"></div>' +
-  '<div><label for="c-imp">Importe medio de un tratamiento, en euros</label><input id="c-imp" type="number" inputmode="decimal" min="0" step="any" placeholder="Ej.: 350"></div>' +
-  '</div><div class="roi-out" aria-live="polite"><div><span class="lab">Dinero parado en tu base de datos</span><div class="big" id="c-eur">—</div></div><div>' +
-  '<div class="outrow"><span>Pacientes y presupuestos sin seguimiento</span><b id="c-n">—</b></div>' +
-  '<div class="outrow"><span>Si vuelve 1 de cada 10</span><b id="c-dec">—</b></div></div>' +
-  '<p class="disc">Cálculo: (pacientes inactivos + presupuestos sin cerrar) × importe medio. No todo se recupera: en la llamada te decimos qué parte es realista en tu clínica.</p>' +
+  '<div><label for="c-sin">Presupuestos al mes que se quedan sin respuesta</label><input id="c-sin" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 24"></div>' +
+  '<div><label for="c-msj">Mensajes o llamadas fuera de horario a la semana</label><input id="c-msj" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej.: 20"></div>' +
+  '<div><label for="c-imp">Factura media de un presupuesto aceptado, en euros</label><input id="c-imp" type="number" inputmode="decimal" min="0" step="any" placeholder="Ej.: 1200"></div>' +
+  '</div><div class="roi-out" aria-live="polite"><div><span class="lab">Lo que se escapa al año</span><div class="big" id="c-eur">—</div></div><div>' +
+  '<div class="outrow"><span>Presupuestos sin seguimiento al año</span><b id="c-pres">—</b></div>' +
+  '<div class="outrow"><span>Mensajes fuera de horario al año</span><b id="c-mens">—</b></div>' +
+  '<div class="outrow"><span>Si recuperas 1 de cada 10</span><b id="c-dec">—</b></div></div>' +
+  '<p class="disc">Cálculo: presupuestos sin respuesta × 12 meses, más 1 de cada 4 mensajes fuera de horario (× 46 semanas laborables) que acabaría en cita, por la factura media. No todo se recupera: en la llamada te decimos qué parte es realista en tu clínica.</p>' +
   '</div></div>' +
 
-  '<h2>Qué hacemos con esos pacientes</h2><ul class="tick">' +
-  '<li>Avisamos a cada paciente cuando le toca volver, sin nombrar su tratamiento.</li>' +
+  '<h2>Qué hacemos con eso</h2><ul class="tick">' +
   '<li>Seguimos cada presupuesto pendiente, uno por uno, hasta que el paciente responde.</li>' +
+  '<li>Contestamos los mensajes que entran con la recepción cerrada y damos cita a cualquier hora.</li>' +
   '<li>Escribimos solo a quien dio su consentimiento. Con el resto preparamos una lista de llamadas para recepción.</li>' +
   '<li>Tu equipo recibe un aviso cuando alguien contesta, y no cambias de programa de gestión.</li></ul>' +
   '<div class="callout"><b>Con los datos de tus pacientes, sin atajos.</b> Los mensajes no mencionan tratamientos ni medicamentos y todos incluyen la baja. Antes de empezar firmamos contigo el contrato de encargado de tratamiento.</div>' +

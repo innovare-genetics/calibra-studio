@@ -599,21 +599,24 @@ function initRoi(){
   calc();
 }
 
-/* Landing de clínicas: dinero parado en pacientes inactivos y presupuestos sin cerrar. null si falta un dato. */
-function calcParado(ina,pre,imp){
-  ina=Math.round(ina); pre=Math.round(pre);
-  if(!(ina>=0)||!(pre>=0)||!(imp>=0)) return null;
-  var n=ina+pre;
-  return {n:n, total:n*imp, decima:n*imp/10};
+/* Landing de clínicas: lo que se escapa al año entre presupuestos sin seguimiento y mensajes
+   fuera de horario. De los mensajes sin responder se cuenta 1 de cada 4 como cita perdida.
+   null si falta un dato o viene en negativo. */
+function calcEscapa(sin,msj,imp){
+  sin=Math.round(sin); msj=Math.round(msj);
+  if(!(sin>=0)||!(msj>=0)||!(imp>=0)) return null;
+  var pres=sin*12, mens=msj*46, citas=Math.round(mens/4), n=pres+citas;
+  return {pres:pres, mens:mens, n:n, total:n*imp, decima:n*imp/10};
 }
 function initCalc(){
-  var ids=['ina','pre','imp'], c={};
+  var ids=['sin','msj','imp'], c={};
   for(var k=0;k<ids.length;k++){c[ids[k]]=document.getElementById('c-'+ids[k]); if(!c[ids[k]])return;}
   function num(e){return e.value.trim()===''?NaN:+e.value;}
   function calc(){
-    var r=calcParado(num(c.ina),num(c.pre),num(c.imp));
+    var r=calcEscapa(num(c.sin),num(c.msj),num(c.imp));
     document.getElementById('c-eur').textContent=r?eur(r.total):'—';
-    document.getElementById('c-n').textContent=r?nf(r.n):'—';
+    document.getElementById('c-pres').textContent=r?nf(r.pres):'—';
+    document.getElementById('c-mens').textContent=r?nf(r.mens):'—';
     document.getElementById('c-dec').textContent=r?eur(r.decima):'—';
   }
   ids.forEach(function(k){c[k].oninput=calc;});
@@ -630,10 +633,10 @@ function initLead(){
     if(tel.replace(/\D/g,'').length<9){g('l-tel').focus();return;}
     if(!mail||!g('l-mail').checkValidity()){g('l-mail').focus();return;}
     var body='Nombre: '+name+'\nClínica: '+clinic+'\nTeléfono: '+tel+'\nCorreo: '+mail+
-      '\n\nPacientes sin venir desde hace más de 6 meses: '+(g('c-ina').value||'—')+
-      '\nPresupuestos sin cerrar: '+(g('c-pre').value||'—')+
-      '\nImporte medio de un tratamiento: '+(g('c-imp').value||'—')+
-      '\nDinero parado: '+g('c-eur').textContent+
+      '\n\nPresupuestos al mes que se quedan sin respuesta: '+(g('c-sin').value||'—')+
+      '\nMensajes o llamadas fuera de horario a la semana: '+(g('c-msj').value||'—')+
+      '\nFactura media de un presupuesto aceptado: '+(g('c-imp').value||'—')+
+      '\nLo que se escapa al año: '+g('c-eur').textContent+
       '\n\n— Enviado desde la calculadora para clínicas';
     var btn=g('l-submit'), original=btn.textContent;
     btn.disabled=true; btn.textContent='Enviando…';
